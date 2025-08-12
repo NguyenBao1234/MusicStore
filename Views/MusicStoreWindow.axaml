@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Width="1000" Height="550"
         x:Class="MusicStore.Views.MusicStoreWindow"
+        xmlns:v="using:MusicStore.Views"
         Title="MusicStoreWindow"
         TransparencyLevelHint="AcrylicBlur"
         ExtendClientAreaToDecorationsHint="True"
@@ -18,7 +19,7 @@
         </ExperimentalAcrylicBorder>
 
         <Panel Margin="40">
-
+            <v:MusicStoreViewUC/>
         </Panel>
     </Panel>
 </Window>
