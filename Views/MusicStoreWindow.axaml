@@ -19,7 +19,7 @@
         </ExperimentalAcrylicBorder>
         <TextBlock>Main Frame of MusicStoreWindow</TextBlock>
         <Panel Margin="40">
-            <v:MusicStoreViewUC/>
+            <v:MusicStoreView/>
         </Panel>
     </Panel>
 </Window>

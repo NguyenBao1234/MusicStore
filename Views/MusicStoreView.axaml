@@ -6,7 +6,7 @@
              
              xmlns:vm="using:MusicStore.ViewModels"
              x:DataType="vm:MusicStoreViewModel"
-             x:Class="MusicStore.Views.MusicStoreViewUC">
+             x:Class="MusicStore.Views.MusicStoreView">
     
     <DockPanel>
         
@@ -18,7 +18,16 @@
                 DockPanel.Dock="Bottom" 
                 HorizontalAlignment="Center" 
                 IsVisible="{Binding IsBusy}"/>
-        <ListBox ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedAlbum}" />
+        <ListBox ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedAlbum}"
+                 Background="Transparent">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+        </ListBox>
+
+
         
     </DockPanel>
     
