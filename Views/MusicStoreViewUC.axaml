@@ -3,17 +3,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             
+             xmlns:vm="using:MusicStore.ViewModels"
+             x:DataType="vm:MusicStoreViewModel"
              x:Class="MusicStore.Views.MusicStoreViewUC">
     
     <DockPanel>
+        
         <StackPanel DockPanel.Dock="Top">
-            <TextBox Watermark="Search for Albums...." />
+            <TextBox Watermark="Search for Albums...." Text = "{Binding SearchText}" />
             <ProgressBar IsIndeterminate="True"  />
         </StackPanel>
         <Button Content="Buy Album" 
                 DockPanel.Dock="Bottom" 
-                HorizontalAlignment="Center" />
-        <ListBox/>
+                HorizontalAlignment="Center" 
+                IsVisible="{Binding IsBusy}"/>
+        <ListBox ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedAlbum}" />
+        
     </DockPanel>
     
 </UserControl>
