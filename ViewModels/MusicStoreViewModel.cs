@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MusicStore.Models;
@@ -14,8 +16,13 @@ public partial class MusicStoreViewModel:ViewModelBase
 
     public ObservableCollection<AlbumViewModel> SearchResults { get; } = new();// <=> [] in c#12; this var like List<> or Array<>
     
+    private CancellationTokenSource? _cancellationTokenSource;
+    
     private async Task DoSearch(string? term)
     {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _cancellationTokenSource.Token;
         IsBusy = true;
         SearchResults.Clear();
 
@@ -28,9 +35,25 @@ public partial class MusicStoreViewModel:ViewModelBase
         }
 
         IsBusy = false;
+        if (!cancellationToken.IsCancellationRequested)
+        {
+            LoadCovers(cancellationToken);
+        }
     }
     partial void OnSearchTextChanged(string? value)
     {
         _ = DoSearch(SearchText);// Discard Return, call to get Side Effect only
+    }
+    
+    private async void LoadCovers(CancellationToken cancellationToken)
+    {
+        foreach (var album in SearchResults.ToList())
+        {
+            await album.LoadCover();
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+        }
     }
 }

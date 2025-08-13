@@ -9,9 +9,9 @@
     
     <StackPanel Spacing="5" Width="200">
         <Border CornerRadius="10" ClipToBounds="True">
-            <Panel Background="#7FFF22DD">
-                <Image Width="200" Stretch="Uniform" />
-                <Panel Height="200">
+            <Panel Background="Transparent">
+                <Image Width="200" Stretch="Uniform" Source="{Binding CoverImgBit}"/>
+                <Panel Height="200" IsVisible="{Binding CoverImgBit, Converter= {x:Static ObjectConverters.IsNull} }">
                     <PathIcon Height="75" Width="75" Data="{StaticResource music_regular}" />
                 </Panel>
             </Panel>
