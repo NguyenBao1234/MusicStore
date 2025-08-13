@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using MusicStore.Models;
 
 namespace MusicStore.ViewModels;
 
@@ -11,10 +13,24 @@ public partial class MusicStoreViewModel:ViewModelBase
     [ObservableProperty] public partial AlbumViewModel? SelectedAlbum { get; set; }
 
     public ObservableCollection<AlbumViewModel> SearchResults { get; } = new();// <=> [] in c#12; this var like List<> or Array<>
-    public MusicStoreViewModel()
+    
+    private async Task DoSearch(string? term)
     {
-        SearchResults.Add(new AlbumViewModel());
-        SearchResults.Add(new AlbumViewModel());
-        SearchResults.Add(new AlbumViewModel());
+        IsBusy = true;
+        SearchResults.Clear();
+
+        var albums = await Album.SearchAsync(term);// Get from Service
+
+        foreach (var album in albums)
+        {
+            var vm = new AlbumViewModel(album);
+            SearchResults.Add(vm);
+        }
+
+        IsBusy = false;
+    }
+    partial void OnSearchTextChanged(string? value)
+    {
+        _ = DoSearch(SearchText);// Discard Return, call to get Side Effect only
     }
 }

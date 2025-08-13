@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              Width = "200"
-             x:Class="MusicStore.Views.AlbumView">
+             x:Class="MusicStore.Views.AlbumView"
+             xmlns:vm="using:MusicStore.ViewModels"
+             x:DataType="vm:AlbumViewModel">
     
     <StackPanel Spacing="5" Width="200">
         <Border CornerRadius="10" ClipToBounds="True">
@@ -13,6 +15,8 @@
                     <PathIcon Height="75" Width="75" Data="{StaticResource music_regular}" />
                 </Panel>
             </Panel>
-        </Border>    
+        </Border>   
+        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}"/>
+        <TextBlock HorizontalAlignment="Center" Text="{Binding Artist}"/>
     </StackPanel>
 </UserControl>
