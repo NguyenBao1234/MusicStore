@@ -12,12 +12,12 @@
         
         <StackPanel DockPanel.Dock="Top">
             <TextBox Watermark="Search for Albums...." Text = "{Binding SearchText, Delay= 400}" />
-            <ProgressBar IsIndeterminate="True"  />
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"/>
         </StackPanel>
         <Button Content="Buy Album" 
                 DockPanel.Dock="Bottom" 
-                HorizontalAlignment="Center" 
-                IsVisible="{Binding IsBusy}"/>
+                HorizontalAlignment="Center"
+                Command="{Binding BuyMusicCommand}"/>
         <ListBox ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedAlbum}"
                  Background="Transparent">
                 <ListBox.ItemsPanel>

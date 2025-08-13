@@ -3,6 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using MusicStore.Message;
 using MusicStore.Models;
 
 namespace MusicStore.ViewModels;
@@ -20,27 +23,27 @@ public partial class MusicStoreViewModel:ViewModelBase
     
     private async Task DoSearch(string? term)
     {
-        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Cancel();//Cancel Loading Old Token ( Previous Albums )
         _cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = _cancellationTokenSource.Token;
         IsBusy = true;
         SearchResults.Clear();
 
-        var albums = await Album.SearchAsync(term);// Get from Service
+        var albums = await Album.SearchAsync(term);// Get from Service, time-consuming
 
         foreach (var album in albums)
         {
-            var vm = new AlbumViewModel(album);
-            SearchResults.Add(vm);
+            AlbumViewModel albumVm = new AlbumViewModel(album);
+            SearchResults.Add(albumVm);
         }
 
         IsBusy = false;
-        if (!cancellationToken.IsCancellationRequested)
+        if (!cancellationToken.IsCancellationRequested)//Only Load New Result search, ensure only load new result's token after time-consuming
         {
             LoadCovers(cancellationToken);
         }
     }
-    partial void OnSearchTextChanged(string? value)
+    partial void OnSearchTextChanged(string? value)//override hook function
     {
         _ = DoSearch(SearchText);// Discard Return, call to get Side Effect only
     }
@@ -52,8 +55,17 @@ public partial class MusicStoreViewModel:ViewModelBase
             await album.LoadCover();
             if (cancellationToken.IsCancellationRequested)
             {
-                return;
+                return;//Stop Loading ImgCover for Albums below if current token was canceled
             }
+        }
+    }
+    
+    [RelayCommand]
+    private void BuyMusic()
+    {
+        if (SelectedAlbum != null)
+        {
+            WeakReferenceMessenger.Default.Send(new MusicStoreCloseMessage(SelectedAlbum));
         }
     }
 }
