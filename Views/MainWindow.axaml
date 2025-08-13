@@ -20,7 +20,7 @@
         </Button>
         
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0 40 0 0">
-            <ItemsControl ItemsSource="{Binding Albums}">
+            <ItemsControl ItemsSource="{Binding AlbumVMs}">
                 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
